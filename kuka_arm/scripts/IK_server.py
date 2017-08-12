@@ -100,6 +100,7 @@ def handle_calculate_IK(req):
 
             # px,py,pz = end-effector position
             # roll, pitch, yaw = end-effector orientation
+
             px = req.poses[x].position.x
             py = req.poses[x].position.y
             pz = req.poses[x].position.z
@@ -208,6 +209,7 @@ def handle_calculate_IK(req):
     #            print("angle_a=", angle_a, "angle_b=", angle_b, "angle_c=", angle_c, "alpha2=", alpha2)  
     #        print("theta4 =", theta4, "theta5 =", theta5, "theta6 =", theta6)
     #            
+
             # Populate response for the IK request
             # In the next line replace theta1,theta2...,theta6 by your joint angle variables
             joint_trajectory_point.positions = [theta1, theta2, theta3, theta4, theta5, theta6]
