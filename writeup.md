@@ -195,11 +195,19 @@ In order to derive the second and third joint angles we shall use the following 
 
 ![alt text][image2]
 
-$$angle\_a = cos_{-1}(\frac{side\_b^2 + side\_c^2 - side\_a^2}{2*side\_b*side\_c})$$
-$$angle\_b = cos_{-1}(\frac{side\_a^2 + side\_c^2 - side\_b^2}{2*side\_a*side\_c})$$
-$$angle\_c = cos_{-1}(\frac{side\_a^2 + side\_b^2 - side\_c^2}{2*side\_a*side\_b})$$
+We will find the x,y and z coordinates of the second joint. We will denote $$ J2_X, J2_Y, J2_Z $$ To find this we will take the last column of  $$^0_2T$$ after we substitute theta1 we found earlier. Now we can start to calculate the sides.
 
-$$angle\_a2 = tan^{-1}(\frac{WC_Z - d_1}{\sqrt{WC_X ^2+WC_Y^2}-a_1})$$
+$$side\_a = \sqrt{a_3^2+d_4^2}$$
+$$side\_b = \sqrt{(WC_X-J2_X)^2+(WC_Y-J2_Y)^2+(WC_Z-J2(Z))^2}$$
+$$side\_c = a_2$$
+
+
+
+$$angle\_a = cos^{-1}(\frac{side\_b^2 + side\_c^2 - side\_a^2}{2*side\_b*side\_c})$$
+$$angle\_b = cos^{-1}(\frac{side\_a^2 + side\_c^2 - side\_b^2}{2*side\_a*side\_c})$$
+$$angle\_c = cos^{-1}(\frac{side\_a^2 + side\_b^2 - side\_c^2}{2*side\_a*side\_b})$$
+
+$$angle\_a2 = tan^{-1}(\frac{WC_Z - J2_Z}{\sqrt{(WC_X-J2_X) ^2+(WC_Y-J2_Y)^2}})$$
 
 $$angle\_b2 = tan^{-1}(-a_3/d_4)$$
 
