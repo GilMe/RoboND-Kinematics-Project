@@ -127,18 +127,48 @@ def handle_calculate_IK(req):
 
             WC = EE - (0.453) * ROT_EE[:,2]
 
+            wx = WC[0]
+            wy = WC[1]
+            wz = WC[2]
+
             theta1 = atan2(WC[1],WC[0])
 
-            side_a = 1.501
-            side_b = sqrt(pow((sqrt(WC[0] * WC[0] + WC[1] * WC[1]) - 0.35), 2) + pow((WC[2] - 0.75), 2))
-            side_c = 1.25
+            # Use q1 for to find origin of joint2
+            base_to_j2 = T0_2.subs({q1: theta1})
+            
+            # The x, y, z values of the origin of joint 2
+            j2_x = base_to_j2[0,3]
+            j2_y = base_to_j2[1,3]
+            j2_z = base_to_j2[2,3]
+
+            # find the lengths of the sides of the triangle and angles
+            side_a = (sqrt(a3**2 + d4**2)).subs(DH_Table)
+            side_b = sqrt((wx-j2_x)**2 + (wy-j2_y)**2 + (wz-j2_z)**2)
+            side_c = a2.subs(DH_Table)
 
             angle_a = acos((side_b * side_b + side_c * side_c -side_a * side_a) / (2 * side_b * side_c))
             angle_b = acos((side_a * side_a + side_c * side_c -side_b * side_b) / (2 * side_a * side_c))
             angle_c = acos((side_a * side_a + side_b * side_b -side_c * side_c) / (2 * side_a * side_b))
 
-            theta2 = pi / 2 - angle_a - atan2(WC[2] - 0.75, sqrt(WC[0] * WC[0] + WC[1] * WC[1]) - 0.35)
-            theta3 = pi / 2 - (angle_b + 0.036)
+            angle_a2 = atan2(wz-j2_z, sqrt((wx-j2_x)**2 + (wy-j2_y)**2))
+            angle_b2 = atan2(-a3,d4).subs(DH_Table)
+
+            #calculate the thetas
+
+            theta2 = (pi/2 - angle_a - angle_a2).evalf()
+            theta3 = (pi/2 - angle_b - angle_b2).evalf()
+
+
+#            side_a = 1.501
+#            side_b = sqrt(pow((sqrt(WC[0] * WC[0] + WC[1] * WC[1]) - 0.35), 2) + pow((WC[2] - 0.75), 2))
+#            side_c = 1.25
+
+#            angle_a = acos((side_b * side_b + side_c * side_c -side_a * side_a) / (2 * side_b * side_c))
+#            angle_b = acos((side_a * side_a + side_c * side_c -side_b * side_b) / (2 * side_a * side_c))
+#            angle_c = acos((side_a * side_a + side_b * side_b -side_c * side_c) / (2 * side_a * side_b))
+
+#            theta2 = pi / 2 - angle_a - atan2(WC[2] - 0.75, sqrt(WC[0] * WC[0] + WC[1] * WC[1]) - 0.35)
+#            theta3 = pi / 2 - (angle_b + 0.036)
 
             R0_3 = T0_1[0:3,0:3] * T1_2[0:3,0:3] * T2_3[0:3,0:3]
             R0_3 = R0_3.evalf(subs={q1: theta1, q2: theta2, q3: theta3})
